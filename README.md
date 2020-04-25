@@ -1,2 +1,5 @@
 # code
-my code c c++ python java go c# flutter android and so on...
+学习代码
+C、C++、Python、Java、Go、C#
+Android、Flutter
+等等。
