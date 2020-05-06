@@ -1,5 +1,9 @@
 # Java变量
 
+[TOC]
+
+
+
 ## 命名规则
 
 略
@@ -155,9 +159,9 @@ public class MainApp {
 }
 ```
 
-### 字符串
+## 字符串
 
-#### 子串
+### 子串
 
 > `public String substring(int beginIndex, int endIndex);`
 
@@ -166,7 +170,7 @@ String greeting = "Hello";
 String s = greeting.substring(0, 3); // "Hel"
 ```
 
-#### 拼接
+### 拼接
 
 + 用`+`拼接
 + `String.join(delimiter, elements)`
@@ -188,7 +192,7 @@ public static void main(String[] args) {
 >
 > join方法拼接字符串需要有分割符
 
-#### 不可变字符串
+### 不可变字符串
 
 String类没有提供用于修改字符串的方法。
 
@@ -196,7 +200,7 @@ String类没有提供用于修改字符串的方法。
 
 不可变字符串有一个有点：编译器可以让字符串共享。
 
-#### 检测字符串是否相等
+### 检测字符串是否相等
 
 + 区分大小写`“hello".equals("world");`
 + 不区分大小写`"hello".equalsIgnoreCase("hello");`
@@ -209,7 +213,7 @@ String类没有提供用于修改字符串的方法。
 >
 > 但是`equals`更好看、更清晰
 
-#### 空字符串与null
+### 空字符串与null
 
 判断一个字符串是否为空：
 
@@ -233,7 +237,201 @@ if (str == null)
 if (str != null && str.length() != 0)
 ```
 
-#### 码点与代码单元
+### 码点与代码单元
 
-`char`数据类型是一个采用UTF-16编码表示Unicode码点的代码单元。
 
+
+`char`数据类型是一个采用UTF-16编码表示Unicode码点的代码单元[^Java码点与代码单元]。
+
++ 码点(code point)是指与一个编码表中的某个字符对应的代码值.
++ 代码单元一个char类型数据，或者说代码单元 是字符。
+
+大多数的常用Unicode字符使用一个代码单元就可以表示,而辅助字符需要一对代码单元表示.  
+
+
+
+length方法将返回采用UTF-16编码表示的给定字符串所需要的代码单元数.
+
+```JAVA
+String greeting = "Hello";
+int n = greeting.length(); // 5
+```
+
+如果要想得到一个字符串的码点数量,可以调用
+
+```JAVA
+int codePoindCount = greeting.codePointCount(0, greeting.length());
+```
+
+> 扩展:
+>
+> 调用s.charAt(n)将返回位置n的代码单元
+>
+> ```java
+> char first = greeting.charAt(0); // first is 'H'
+> char last = greeting.charAt(4); // last is 'o'
+> ```
+>
+> 如果想要得到第n个码点,应该使用下列语句
+>
+> ```
+> int index = greeting.offsetByCodePoints(0, n);
+> int codePoint = greeting.codePointAt(index);
+> ```
+>
+> 
+
+### String API
+
+| 方法                                                         | 说明                                                         |
+| :----------------------------------------------------------- | :----------------------------------------------------------- |
+| char charAt(int index);                                      | 返回给定位置的代码单元(char)                                 |
+| int codePointAt(int index);                                  | 返回给定位置的码点                                           |
+| int offsetByCodePoints(int startIndex, int cpCount);         | 返回从startIndex代码点开始,位移cpCount后的码点索引           |
+| int compareTo(String other);                                 | 按照字典顺序,如果字符串位于other之前,返回一个负数;如果字符串位于other之后,返回一个正数;如果两个字符串相等,返回0. |
+| IntStream codePoints();                                      | 将这个字n 符串的码点作为一个流返回.调用toArray将他们放在一个数组中. |
+| new String(int[] codePoints, int offset, int count);         | 用数组中从offset开始的count个码点构造一个字符串.             |
+| boolean equals(Object other);                                | 如果字符串与other相等,返回true.                              |
+| boolean equalsIgnoreCase(String other);                      | 如果字符串与other相等(忽略大小写),返回true.                  |
+| boolean startsWith(String perfix);                           | 如果字符串以prefix开头,则返回true.                           |
+| boolean endsWith(String suffix);                             | 如果字符串以suffix结尾,则返回true.                           |
+| int indexOf(String str)                                      | 返回与字符串str或代码点cp匹配的第一个                        |
+| int indexOf(String str, int formIndex);                      | 子串的开始位置.这个位置从索引0或                             |
+| int indexOf(int cp);                                         | fromIndex开始计算.如果在原始串中不存在                       |
+| int indexOf(int cp, int fromIndex);                          | str,返回-1.                                                  |
+| int lastIndexOf(String str);                                 | 返回与字符串str或代码点cp匹配的最后一个                      |
+| int lastIndexOf(String str, int fromIndex);                  | 子串的开始位置.这个位置从原始串尾端或                        |
+| int lastIndexOf(int cp);                                     | fromIndex开始计算.                                           |
+| int lastIndexOf(int cp, int fromIndex);                      |                                                              |
+| int length();                                                | 返回字符串的长度                                             |
+| int codePointCount(int startIndex, int endIndex);            | 返回startIndex和endIndex-1之间的代码点数量.没有配成对的代用字符将计入代码点. |
+| String replace(CharSequence oldString, CharSequence newString); | 返回一个新字符串.这个字符串用newString代替原始字符串中所有的oldString.可以用String或StringBuilder对象作为CharSequence参数. |
+| String substring(int beginIndex);                            | 返回一个新字符串.这个字符串包含原始字符                      |
+| String substring(int beginIndex, int endIndex);              | 串中从beginIndex到串尾或endIndex-1的所有代码单元             |
+| String toLowerCase();                                        | 小写                                                         |
+| String toUpperCase();                                        | 大写                                                         |
+| String trim();                                               | 返回一个新字符串.这个字符串将删除原始字符串头部和尾部的空格. |
+| String join(CharSequence delimiter, CharSequence... elements); | 返回一个新字符串,用给定的定界符连接所有元素.                 |
+|||
+
+### 构建字符串(StringBuilder)
+
+```JAVA
+StringBuilder builder = new StringBuilder();
+builder.append(ch); // append a single character
+builder.append(str); // append a string
+String completedString = builder.toString();
+```
+
+> 注释:在JDK5.0中引入StringBuilder类.这个类的前身是StringBuffer,其效率稍有些低,但允许采用多线程的方式执行添加或删除字符串的操作.如果所有字符串在一个单线程中编程(通常都是这样),则因该用StringBuilder替代它.这两个类的API是相同的.
+
+| __     | StringBuilder | StringBuffer |
+| ------ | ------------- | :----------: |
+| 效率   | 相对高        |    相对低    |
+| 多线程 | 不可以        |     可以     |
+
+API:
+
+| 方法                                               | 说明                                                    |
+| -------------------------------------------------- | ------------------------------------------------------- |
+| StringBuilder()                                    | 构造一个空的字符串构建器                                |
+| int lenth()                                        | 返回构建器或缓冲器中的代码单元数量                      |
+| StringBuilder append(String str)                   | 追加一个字符串并返回this                                |
+| StringBuilder append(char c)                       | 追加一个代码但会员并返回this                            |
+| StringBuilder appendCodePoint(int cp)              | 追加一个代码点,并将其转换为一个或两个代码单元并返回this |
+| void setCharAt(int i, char c);                     | 将第i个代码单元设置为c                                  |
+| StringBuilder insert(int offset, String str)       | 在offset位置插入一个字符串并返回this                    |
+| StringBuilder insert(int offset, char c)           | 在offset位置插入一个代码单元并返回this                  |
+| StringBuilder delete(int startIndex, int endIndex) | 删除偏移量从startIndex到endIndex-1的代码单元并返回this  |
+
+## 输入输出
+
+java的标准输出流(控制台窗口)
+
+`System.out.println`
+
+标准输入流,需要先构造一个Scanner对象.
+
+`Scanner in = new Scanner(System.in);`
+
+`in.next();`下一个单词
+
+`in.nextLine();`下一行
+
+`in.nextInt();`下一个整数
+
+```JAVA
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+
+        System.out.print("What is your name? ");
+        String name = in.nextLine();
+
+        System.out.print("How old are you? ");
+        int age = in.nextInt();
+
+        System.out.println("Hello, " + name + ". Next year, you'll be " +(age + 1));
+    }
+}
+```
+
+> **注释**:因为输入时可见的,所以Scanner类不适用与从控制台读取密码.Java SE 6特别引入了Console类实现这个目的.要想读取一个密码,可以采用下列代码:
+>
+> ```java
+> public class MainApp {
+>     public static void main(String[] args) {
+>         Console console = System.console();
+>         if (console == null) {
+>             System.out.println("ERROR console == null !!!");
+>             System.exit(1);
+>         }
+>         String name = console.readLine("User name: ");
+>         char[] passwd = console.readPassword("Mr/Miss %s Please input your pass word: ", name);
+> 
+>         System.out.printf("USER NAME [%s]%n", name);
+>         System.out.printf("PASS WORD [%s]%n", new String(passwd));
+>     }
+> }
+> ```
+>
+> 注意如果没有可交互的控制台,System.console()方法将会返回null.
+
+### Scanner
+
+| 方法                    | 说明                                         |
+| ----------------------- | -------------------------------------------- |
+| Scanner(InputStream in) | 用给定的输入流创建一个Scanner对象            |
+| String nextLine()       | 读取输入的下一行内容                         |
+| String next()           | 读取输入的下一个单词(以空格作为分隔符)       |
+| int nextInt()           | 读取并转换下一个表示整数的字符序列           |
+| int nextDouble()        | 读取并转换下一个表示浮点数的字符序列         |
+| boolean hasNext()       | 检测输入中是否还有其他单词                   |
+| boolean hasNextInt()    | 检测输入中是否还有表示整数的下一个字符序列   |
+| boolean hasNextDouble() | 检测输入中是否还有表示浮点数的下一个字符序列 |
+
+### System
+
+`static Console console();`
+
+> 如果有可能进行交互操作,通过控制台窗口为交互的用户返回一个Console对象,否则返回null.对于任何一个通过控制台窗口启动的程序,都可以使用Consoel对象.否则,其可用性将与使用的系统有关.
+>
+> 说人话就是用了这个,程序要在控制台终端中运行.
+
+### Console
+
+`static char[] readPassword(String prompt, Object... args)`
+
+`static String readLine(String prompt, Object... args)`
+
+ 显示字符串prompt并且读取用户输入,知道输入行结束.args参数可以用来提供输入格式.
+
+Console类的方法只能按行读取.
+
+
+
+# 参考
+
+[^Java码点与代码单元]: https://www.cnblogs.com/huaranmeng/p/12774984.html
