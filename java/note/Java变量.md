@@ -68,7 +68,7 @@ public static final double PI = 3.14159265358979323846;
 
 # 运算符
 
-![1588149856431](/home/zuoshiyu/.config/Typora/typora-user-images/1588149856431.png)
+![Java运算符](./picture/java_operator.png)
 
 ## Math
 
@@ -89,7 +89,7 @@ public static void main(String[] args) {
 
 ## 数值之间的转换
 
-![1588227498236](/home/zuoshiyu/.config/Typora/typora-user-images/1588227498236.png)
+![Java支持的数值转换](./picture/number_change.png)
 
 上图中的实线部分类型转换不会有精度缺失，虚线部分会有精度缺失。
 
