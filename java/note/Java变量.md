@@ -430,6 +430,56 @@ public class Main {
 
 Console类的方法只能按行读取.
 
+### 格式化输出
+
+
+
+![Java保留C语言的格式化输入](./picture/formate_output.png)
+
+
+
+
+
+printf还支持很多种格式化输出，如下图。
+
+![System.out.printf](./picture/printf.png)
+
+printf还支持各种标识符
+
+![标识符](./picture/printf_flag.png)
+
+
+
+> **注释**：可以使用`%s`转换符格式化任意的对象。对于任意实现了Formattable接口的对象都将调用formatTo方法；否则将调用toString方法，他可以将对象转换为字符串。
+
+
+
+后续
+
+一些时间格式化的转换符
+
+![](./picture/date_format.png)
+
+![](./picture/date_format_2.png)
+
+
+
+关于printf的格式说明符
+
+![格式说明符语法](./picture/printf_common.png)
+
+
+
+
+
+
+
+### 文件输入与输出
+
+
+
+
+
 
 
 # 参考
