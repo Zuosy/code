@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.zuo.statemachine;
+package com.zuo.statemachine.util;
 
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -27,7 +27,6 @@ import androidx.annotation.VisibleForTesting;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;

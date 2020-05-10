@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package com.zuo.statemachine;
+package com.zuo.statemachine.util;
 
 import android.os.Message;
+
+import com.zuo.statemachine.util.IState;
 
 /**
  * {@hide}
