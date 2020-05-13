@@ -21,12 +21,26 @@ public class HandleRequiredService extends Service {
     public void onCreate() {
         super.onCreate();
         XLog.d("拉起service");
+
+
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         XLog.d("onBind");
         XLog.d("intent Action" + intent.getAction());
+        try {
+            binder.linkToDeath(()->{
+                XLog.d("弟弟，你已经死了");
+            }, 0);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
         return binder;
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
     }
 }

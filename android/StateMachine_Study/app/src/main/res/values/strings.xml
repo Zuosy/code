@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">StateMachine_study</string>
+    <integer name="xxx">12</integer>
+    <string name="sayHomeAddress">家庭地址未注册，请说出家庭地址</string>
+    <string name="selectPoi">请选择D几个</string>
 </resources>

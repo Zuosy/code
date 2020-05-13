@@ -25,6 +25,7 @@ import android.util.Log;
 
 import androidx.annotation.VisibleForTesting;
 
+import com.elvishew.xlog.XLog;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -448,10 +449,10 @@ public class StateMachine {
      * {@hide}
      */
     public static class LogRec {
-        private StateMachine mSm;
-        private long mTime;
-        private int mWhat;
-        private String mInfo;
+        private StateMachine mSm; // 状态机
+        private long mTime; // 时间
+        private int mWhat; // Message的What
+        private String mInfo; // 信息，不知道是什么
         private IState mState;
         private IState mOrgState;
         private IState mDstState;
@@ -689,7 +690,7 @@ public class StateMachine {
         private static final Object mSmHandlerObj = new Object();
 
         /** The current message */
-        private Message mMsg;
+        private Message mMsg; // 当前的Message
 
         /** A list of log records including messages this state machine has processed */
         private LogRecords mLogRecords = new LogRecords();
@@ -698,25 +699,25 @@ public class StateMachine {
         private boolean mIsConstructionCompleted;
 
         /** Stack used to manage the current hierarchy of states */
-        private StateInfo mStateStack[];
+        private StateInfo mStateStack[]; // 状态栈
 
         /** Top of mStateStack */
-        private int mStateStackTopIndex = -1;
+        private int mStateStackTopIndex = -1; // 栈指针
 
         /** A temporary stack used to manage the state stack */
-        private StateInfo mTempStateStack[];
+        private StateInfo mTempStateStack[]; // 临时栈 ？？？
 
         /** The top of the mTempStateStack */
-        private int mTempStateStackCount;
+        private int mTempStateStackCount; // 临时栈的栈指针
 
         /** State used when state machine is halted */
-        private HaltingState mHaltingState = new HaltingState();
+        private HaltingState mHaltingState = new HaltingState(); // 状态机内置的停止状态 State entered when transitionToHaltingState is called.
 
         /** State used when state machine is quitting */
-        private QuittingState mQuittingState = new QuittingState();
+        private QuittingState mQuittingState = new QuittingState(); // 退出状态
 
         /** Reference to the StateMachine */
-        private StateMachine mSm;
+        private StateMachine mSm; // 状态机
 
         /**
          * Information about a state.
@@ -746,10 +747,10 @@ public class StateMachine {
         private HashMap<State, StateInfo> mStateInfo = new HashMap<State, StateInfo>();
 
         /** The initial state that will process the first message */
-        private State mInitialState;
+        private State mInitialState; // 初始状态
 
         /** The destination state when transitionTo has been invoked */
-        private State mDestState;
+        private State mDestState; // 当transitionTo调用时的目标状态
 
         /**
          * Indicates if a transition is in progress
@@ -757,10 +758,10 @@ public class StateMachine {
          * This will be true for all calls of State.exit and all calls of State.enter except for the
          * last enter call for the current destination state.
          */
-        private boolean mTransitionInProgress = false;
+        private boolean mTransitionInProgress = false; // 过渡？？？
 
         /** The list of deferred messages */
-        private ArrayList<Message> mDeferredMessages = new ArrayList<Message>();
+        private ArrayList<Message> mDeferredMessages = new ArrayList<Message>(); // 延时消息列表
 
         /**
          * State entered when transitionToHaltingState is called.
@@ -790,16 +791,17 @@ public class StateMachine {
          * back onto the queue when transitioning to a new state.
          */
         @Override
-        public final void handleMessage(Message msg) {
-            if (!mHasQuit) {
+        public final void handleMessage(Message msg) { // 从状态及发送过来的sendMessage(msg)
+            XLog.i("SmHandler :: handleMessage [%d]", msg.what);
+            if (!mHasQuit) { // 状态及还未退出
                 if (mSm != null && msg.what != SM_INIT_CMD && msg.what != SM_QUIT_CMD) {
-                    mSm.onPreHandleMessage(msg);
+                    mSm.onPreHandleMessage(msg); // 状态对象处理消息之前，状态机看一下
                 }
 
                 if (mDbg) mSm.log("handleMessage: E msg.what=" + msg.what);
 
                 /** Save the current message */
-                mMsg = msg;
+                mMsg = msg; // 当前消息
 
                 /** State that processed the message */
                 State msgProcessedState = null;
@@ -1062,11 +1064,15 @@ public class StateMachine {
          * reversing the order of the items on the temporary stack as
          * they are moved.
          *
+         *    | S0 |           | S4 |
+         *    | S1 |   =====>  | S1 |
+         *    | S4 |           | S0 |
+         *     temp             stack
          * @return index into mStateStack where entering needs to start
          */
         private final int moveTempStateStackToStateStack() {
-            int startingIndex = mStateStackTopIndex + 1;
-            int i = mTempStateStackCount - 1;
+            int startingIndex = mStateStackTopIndex + 1; // 0
+            int i = mTempStateStackCount - 1; // 2
             int j = startingIndex;
             while (i >= 0) {
                 if (mDbg) mSm.log("moveTempStackToStateStack: i=" + i + ",j=" + j);
