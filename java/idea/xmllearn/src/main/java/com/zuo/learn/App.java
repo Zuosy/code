@@ -6,9 +6,7 @@ package com.zuo.learn;
  */
 public class App 
 {
-    public static void main( String[] args )
-    {
-        ConfigVersion obj = new ConfigVersion();
-        obj.run();
+    public static void main(String args[]) {
+
     }
 }
